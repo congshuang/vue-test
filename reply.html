@@ -1,0 +1,552 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="<%=basePath%>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <title>文件请求工作流</title>
+    <link rel="stylesheet" href="static/plugin/layui-v1.0.7/layui/css/layui.css"/>
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+        body,html{
+            width:100%;
+            height: 100%;
+            position: relative;
+        }
+        ul li{
+            list-style: none;
+        }
+        .title{
+            width: 100%;
+            height: 5%;
+            border-bottom: solid 1px #cccbcb;
+        }
+        #name{
+            font-family: Arial;
+            font-size: 21px;
+            font-style: normal;
+            font-weight: 200;
+            width: 148px;
+            height: 98%;
+            margin-left: 2%;
+            display: block;
+            border-bottom: solid 3px #87AEC3;
+        }
+        .message{
+            width: 100%;
+            height: 10%;
+            position: relative;
+        }
+        .message_name{
+            width: 30%;
+            height: 40px;
+            position: absolute;
+            left: 3%;
+            line-height: 40px;
+            overflow: hidden;
+            top: 10%;
+        }
+        .message_name img{
+            float: left;
+            width: 30px;
+            height: 30px;
+            border-radius: 15px;
+            margin-top: 5px;
+        }
+        .message_name span{
+            font: normal 18px/40px "微软雅黑";
+            color: #999999;
+            margin-left: 15px;
+        }
+        .message_time{
+            width: 100px;
+            height: 20px;
+            position: absolute;
+            right: 5%;
+            top: 25%;
+            font-size: 12px;
+            font-style: normal;
+            color: #A0A0A0;
+
+        }
+        .message_bottom{
+            width: 80%;
+            position: absolute;
+            top: 70%;
+            left: 4%;
+            font-family: 微软雅黑;
+            font-size: 13px;
+            font-style: normal;
+            font-weight: 100;
+            letter-spacing: 2px;
+
+        }
+        .wrap{
+            width: 95%;
+            height: 78%;
+            border:solid 1px #cccbcb;
+            margin: 2% auto 0 auto;
+        }
+        .top{
+            width: 100%;
+            height: 70%;
+            border: solid 1px white;
+            margin: 0% auto 0 auto;
+            overflow-y: scroll;
+        }
+
+        .top_ul{
+            width: 100%;
+            height: auto !important;
+        }
+        .top_li{
+            width: 100%;
+            height: auto;
+            margin: 1% 0 0 0;
+
+        }
+        .logo{
+            width: 99%;
+            overflow: hidden;
+            margin-left: 5px;
+        }
+        .logo img{
+            display: block;
+            float: left;
+            width: 30px;
+            height: 30px;
+        }
+        .logo span{
+            display: block;
+            float: left;
+            font-family: 微软雅黑;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 100;
+            margin-left: 1%;
+            line-height: 30px;
+        }
+        .top_time{
+            width: 100%;
+            overflow: hidden;
+        }
+        .time{
+            display: block;
+            float: left;
+            font-family: 微软雅黑;
+            font-size: 12px;
+            font-style: inherit;
+            width: 70px;
+            font-weight: 100;
+            margin: 3px 0 0 3.6%;
+        }
+        .event{
+            display: block;
+            width: 87%;
+            float: left;
+            font-family: 微软雅黑;
+            font-size: 12px;
+            font-style: inherit;
+            font-weight: 100;
+            letter-spacing: 2px;
+        }
+        .top_img{
+            width: 100%;
+            height:auto!important;
+            height: 5px;
+            min-height: 5px;
+            margin: 2% 0 10px 0;
+        }
+        .div_img{
+            width: 95%;
+            height:auto!important;
+            height: 5px;
+            min-height: 5px;
+            position: relative;
+            overflow: hidden;
+            margin-left: 5%;
+        }
+        ::-webkit-scrollbar {    width: 4px;}
+        ::-webkit-scrollbar-track {    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);    border-radius: 10px;}
+        ::-webkit-scrollbar-thumb {    border-radius: 10px;    background: rgba(0,0,0,0.1);    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);}
+        ::-webkit-scrollbar-thumb:window-inactive {    background: rgba(100,0,0,0.1);}
+        .div_img img{
+            height: 150px;
+            width: 15%;
+            display: block;
+            float: left;
+            margin-right: 2%;
+        }
+        .bottom{
+            width: 96%;
+            height: 24%;
+            border: solid 1px #d4d3d3;
+            margin: 1% auto 0 auto;
+            position: relative;
+        }
+        #up{
+            position: absolute;
+            width: 65px;
+            height: 30px;
+            top: 75%;
+            left: 89%;
+            background: #ED908B;
+            line-height: 30px;
+        }
+        #down,#file_input{
+            position: absolute;
+            width: 5%;
+            height: 19%;
+            top: 72%;
+            left: 83%;
+            background: white;
+        }
+        .shuru{
+            display: block;
+            width: 98%;
+            height:66%;
+            position: absolute;
+            top:6%;
+            left: 1%;
+            border: none;
+            font-family: 微软雅黑;
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 100;
+            outline: none;
+
+        }
+        #stl{
+            font-family: 微软雅黑;
+            font-style: normal;
+            font-size: 14px;
+            font-weight: 100;
+            line-height: 1px;
+            color: #82A7BA;
+        }
+        #i_sty{
+            color: #82A7BA;
+            font-size: 18px;
+            line-height: 30px;
+        }
+        .bg{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,.5);
+            display: none;
+            z-index: 1;
+        }
+        .bg img{
+            position: absolute;
+            width: auto;
+            height: 40%;
+            top:40%;
+            left:33%;
+        }
+        .leftlogo{
+            position: absolute;
+            width: 4%;
+            height: 150px;
+            /*left: 4%;*/
+            background: white;
+            text-align: center;
+            opacity: 0;
+        }
+        .rightlogo{
+            position: absolute;
+            width: 4%;
+            height: 150px;
+            right: 5%;
+            background: white;
+            text-align: center;
+            opacity: 0;
+        }
+        .leftlogo:hover,.rightlogo:hover{
+            opacity: .5;
+            cursor: default;
+        }
+        .lg{
+            display: block;
+            color: black;
+            font-size: 30px;
+            position: absolute;
+            top:42%;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+<div class="bg">
+    <img src=""/>
+</div>
+<div class="title"><p id="name">工作请求工作流</p></div>
+<div class="message">
+    <!--<div class="message_name"><img src="static/images/new/1.png"><span>林某某</span></div>
+    <div class="message_time">2017.01.01</div>
+    <div class="message_bottom">对于在xxx地区xxx街道xxx号发生的诱拐人口事件，案件事件：2017.01.01，嫌疑人：xxx，作案手段：xxxx需要一名人员前去协助</div>-->
+</div>
+<div class="wrap">
+    <div class="top" id="div">
+        <ul class="top_ul">
+            <!--<li class="top_li">
+                <div class="logo"> <img src="static/images/new/6.png"><span>林某某</span></div>
+                <div class="top_time">
+                    <span class="time">昨天&nbsp;20:02</span>
+                    <span class="event"> 该事物我们已完成，还剩下什么，该事物我们已完成，还剩下什么，该事物我们已完成，还剩下什么，该事物我们已完成，还剩下什么，该事物我们已完成，还剩下什么，
+                    该事物我们已完成该事物我们已完成该事物我们已完成该事物我们已完成该事物我们已完成</span>
+                </div>
+            </li>
+
+            <li class="top_li">
+                <div class="logo"> <img src="static/images/new/9.png"><span>刘某某</span></div>
+                <div class="top_time">
+                    <span class="time">昨天&nbsp;20:02</span>
+                    <span class="event"> 该事物我们已完成，还剩下什么，该事物我们已完成，还剩下什么，该事物我们已完成，还剩下什么，该事物我们已完成，还剩下什么，该事物我们已完成，还剩下什么，
+                    该事物我们已完成该事物我们已完成该事物我们已完成该事物我们已完成该事物我们已完成</span>
+                </div>
+                <div class="top_img">
+                   <div class="div_img">
+                     <div class="leftlogo"><i class="layui-icon lg" >&#xe603;</i>  </div>
+                       <img src="static/images/new/Lake.jpg"/><img src="static/images/new/Lake.jpg"/><img src="static/images/new/Lake.jpg"/>
+                       <div class="rightlogo"><i class="layui-icon lg" >&#xe602;</i>  </div>
+                   </div>
+                </div>
+            </li>-->
+
+        </ul>
+    </div>
+    <div class="bottom">
+        <div class="shuru" contenteditable="true"></div>
+        <button class="layui-btn layui-btn-danger" id="up">回复</button>
+        <button class="layui-btn layui-btn-danger" id="down"><i class="layui-icon" style="font-size: 25px; color: #1E9FFF;">&#xe61d;</i> </button>
+        <input type="file" name="myfile1" id="file_input" multiple="multiple" style="opacity: 0">
+    </div>
+</div>
+<script src="static/plugin/jquery/jquery-1.7.2.min.js"></script>
+<script src="static/plugin/layui-v1.0.7/layui/lay/dest/layui.all.js"></script>
+<script>
+    window.onload = function(){
+        randerDom();
+        var scrollHeight = $("#div")[0].scrollHeight;
+        $('.top').scrollTop(scrollHeight);
+        var input = document.getElementById("file_input");
+        var result,div;
+        var filename=new Array();
+        var fe=0;
+        if(typeof FileReader==='undefined'){
+            result.innerHTML = "抱歉，你的浏览器不支持 FileReader";
+            input.setAttribute('disabled','disabled');
+        }else{
+            input.addEventListener('change',readFile,false);
+        }
+        //handler
+        function readFile(){
+            for(var i=0;i<this.files.length;i++) {
+                var index = 0;
+                if (!input['value'].match(/.jpg|.gif|.png|.bmp/i)) { //判断上传文件格式
+                    fe++;
+                    console.log("1");
+                } else{
+                    var reader = new FileReader();
+                    reader.readAsDataURL(this.files[i]);
+                    reader.onload = function (e) {
+                        filename[index] = this.result; //插入dom树
+                        index++;
+                    };
+                };
+            };
+        }
+        $("#up").click(function () {
+            var value=$(".shuru").text();
+            var f=filename;
+            var f1=fe;
+            if(f1==0&&value==""&&f.length==0){
+                layui.use('layer', function() { //独立版的layer无需执行这一句
+                    var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                    layer.msg('请输入内容');
+                });
+            }else{
+                var str=matcher(f,f1,value);
+                $(".top_ul").append(str);
+                $(".shuru").text("");
+                fe=0;
+                if(filename.length>5){
+                    var last=$(".div_img").last();
+                    last.find("img").each(function (index) {
+                        if(index>=5){
+                            $(this).hide();
+                        }
+                    });
+                }
+                filename.length=0;
+            }
+            //提交事件
+            $(".ck").click(function () {
+                var path=$(this).attr("src");
+                $(".bg img").attr("src",path);
+                $(".bg").show();
+            });
+            $(".bg").click(function () {
+                $(".bg").hide();
+            });
+            //图片展示事件
+
+            $(".div_img").on('click','.rightlogo',function () {
+                var bool=true;
+                var pp=$(this).siblings("img");
+                var h1=true;
+                var h2=false;
+                pp.each(function (index) {
+                    h2=$(this).is(':hidden');
+                    if(!h1&&h2){
+                        if(bool){
+                            $(this).show();
+                            pp.eq(index-5).hide();
+                            bool=!bool;
+                        }
+                    }
+                    h1= $(this).is(':hidden');
+                });
+            });
+            $(".div_img").on('click','.leftlogo',function () {
+                var bool=true;
+                var pp=$(this).siblings("img");
+                var h1=false;
+                var h2=true;
+                pp.each(function (index) {
+                    h2=$(this).is(':hidden');
+                    if(h1&&!h2){
+                        if(bool){
+                            pp.eq(index-1).show();
+                            pp.eq(index+4).hide();
+                            bool=!bool;
+                        }
+                    }
+                    h1= $(this).is(':hidden');
+                });
+            });
+
+//                 var fd = new FormData();
+//                 var fs=$("#file_input");
+//                 for(var i=0;i<fs.files.length;i++){
+//                     var reader = new FileReader();
+//                     reader.readAsDataURL(fs.files[i]);
+//                     fd.append(i,fs.files[i]);
+//                 }
+//                 $.ajax({
+//                     url: '' ,
+//                     type: 'POST',
+//                     data: fd,
+//                     async: false,
+//                     cache: false,
+//                     contentType: false,
+//                     processData: false,
+//                     success: function (returndata) {
+//                         alert(returndata);
+//                     },
+//                     error: function (returndata) {
+//                         alert(returndata);
+//                     }
+//                 })
+            var scrollHeight = $("#div")[0].scrollHeight;
+            $('.top').scrollTop(scrollHeight);
+        });
+        function matcher(s,s1,value) {
+            var imgstr="";
+            var filestr="";
+            if(s.length!==0){
+                var nt = "";
+                for(var t=0;t<s.length;t++){
+                    nt+='<img class="ck" src='+s[t]+'>';
+                }
+                if(s.length>5){
+                    imgstr='<div class="top_img">'
+                        +'<div class="div_img">'
+                        +'<div class="leftlogo"><i class="layui-icon lg" >&#xe603;</i></div>'
+                        +nt
+                        +'<div class="rightlogo"><i class="layui-icon lg" >&#xe602;</i></div>'
+                        +'</div>';
+                }else {
+                    imgstr='<div class="top_img">'
+                        +'<div class="div_img">'
+                        +nt
+                        +'</div>';
+                };
+            }
+            if(s1!==0){
+                for(var t=0;t<s1;t++){
+                    var ii="附件"+t;
+                    console.log("2");
+                    filestr+='<span id="stl"><i class="layui-icon" id="i_sty">&#xe64c;</i>'+ii+'</span>';
+                };
+            }
+            var d = new Date();
+            var date = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+            var str =' <li class="top_li">'
+                +'<div class="logo">'+' <img src="static/images/new/6.png">'+'<span>'+"林某某"+'</span>'+filestr+'</div>'
+                +'<div class="top_time">'
+                +'<span class="time">'+date+'</span>'
+                +'<span class="event"> '+value+'</span>'
+                +'</div>'
+                +imgstr
+                + '</li>';
+
+            return str;
+        }
+
+        //渲染评论数据
+        function randerDom(){
+            var iTemp1 = "",
+                iTemp2 = "";
+            $.ajax({
+                    url:"<%=basePath%>/static/workRelease/dataResource.json",
+                    dataType:"json",
+                    success:function(callback){
+                        var data1 = callback.messages.news;
+                        var data2 = callback.messages.reviews;
+                        console.log(data2);
+                        iTemp1 += '<div class="message_name"><img src="static/images/new/1.png"><span>'+data1.name+'</span></div>'
+                            +'<div class="message_time">'+data1.time+'</div>'
+                            +'<div class="message_bottom">'+data1.event+'</div>'
+                        $('.message').append(iTemp1);
+
+                        for (var i =0;i<data2.length;i++) {
+                            iTemp2 +=  '<li class="top_li">'
+                                +'<div class="logo"> <img src="static/images/new/9.png"><span>'+data2[i].name+'</span>'
+//					                          +'<span id="stl"><i class="layui-icon" id="i_sty"></i>附件0</span>'
+                                +'</div>'
+                                +'<div class="top_time">'
+                                +'<span class="time">'+data2[i].time+'</span>'
+                                +'<span class="event">'+data2[i].event+' </span>'
+                                +'</div>'
+                                +'<div class="top_img">'
+                                +'<div class="div_img">'
+//					                          +'<div class="leftlogo"><i class="layui-icon lg" >&#xe603;</i>  </div>'
+                                +'<img src="static/images/new/Lake.jpg"/><img src="static/images/new/Lake.jpg"/><img src="static/images/new/Lake.jpg"/>'
+//					                            +'<div class="rightlogo"><i class="layui-icon lg" >&#xe602;</i>  </div>'
+                                +'</div>'
+                                +'</div>'
+                                +'</li>'
+                        }
+                        $(".top_ul").append(iTemp2);
+                    }
+                }
+
+
+            )
+        }
+
+    }
+
+
+</script>
+</body>
+</html>
